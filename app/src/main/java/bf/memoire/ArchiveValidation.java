@@ -19,6 +19,9 @@ final class ArchiveValidation {
             JSONArray files=n.getJSONArray("files");
             for(int j=0;j<files.length();j++){JSONObject f=files.getJSONObject(j);String fileId=f.getString("id");if(!fileId.matches("[a-fA-F0-9-]{36}")||!new File(attachments,fileId).isFile())throw new IOException("Pièce jointe absente");f.getString("name");}
         }
+        JSONArray projects=db.optJSONArray("projects");if(db.has("projects")&&projects==null)throw new IOException("Projets invalides");
+        Set<String> projectNames=new HashSet<>();if(projects!=null)for(int i=0;i<projects.length();i++){JSONObject p=projects.getJSONObject(i);String name=p.getString("name"),space=p.getString("space");if(name.trim().isEmpty()||space.trim().isEmpty()||!projectNames.add(space+"\u0000"+name))throw new IOException("Projet invalide ou dupliqué");p.getString("id");p.getString("goal");p.getString("nextAction");p.getString("status");}
+        JSONArray searches=db.optJSONArray("searches");if(db.has("searches")&&searches==null)throw new IOException("Recherches invalides");if(searches!=null)for(int i=0;i<searches.length();i++)if(searches.getJSONObject(i).getString("name").trim().isEmpty())throw new IOException("Nom de recherche absent");
         JSONArray ts=db.optJSONArray("templates");if(db.has("templates")&&ts==null)throw new IOException("Modèles invalides");
         if(ts!=null)for(int i=0;i<ts.length();i++){JSONObject t=ts.getJSONObject(i);t.getString("name");fields(t.getJSONArray("fields"));}
     }
