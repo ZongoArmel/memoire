@@ -1,0 +1,18 @@
+# Compilation et configuration locale
+.gradle/
+build/
+build-local/
+**/build/
+local.properties
+.idea/
+*.iml
+# Clés privées, paquets et données personnelles
+signing/
+*.jks
+*.keystore
+*.apk
+*.idsig
+*.sqlite*
+*.memoire
+*.zip
+.env*
